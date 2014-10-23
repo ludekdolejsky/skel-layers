@@ -1330,9 +1330,9 @@ skel.registerPlugin('layers', (function($) {
 
 					_.cache.window._skel_layers_scrollPos = _.cache.window.scrollTop();
 				
-					// Lock overflow.
-						if (_._.vars.isTouch)
-							_.cache.htmlbody.css('overflow-' + a, 'hidden');
+					// Lock overflow (x-axis only).
+						if (a == 'x')
+							_.cache.htmlbody.css('overflow-x', 'hidden');
 						
 					// Lock events.
 						_.cache.wrapper.on('touchstart.lock click.lock scroll.lock', function(e) {
@@ -1710,9 +1710,9 @@ skel.registerPlugin('layers', (function($) {
 				 */
 				unlockView: function(a) {
 					
-					// Unlock overflow.
-						if (_._.vars.isTouch)
-							_.cache.htmlbody.css('overflow-' + a, 'visible');
+					// Unlock overflow (x-axis only).
+						if (a == 'x')
+							_.cache.htmlbody.css('overflow-x', 'visible');
 					
 					// Unlock events.
 						_.cache.wrapper.off('touchstart.lock click.lock scroll.lock');
