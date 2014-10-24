@@ -973,91 +973,68 @@ skel.registerPlugin('layers', (function($) {
 									
 								});
 
-					// Touch stuff
-						if (_._.vars.isTouch) {
-						
-							$le
-								.on('touchstart', function(e) {
-									_this.touchPosX = e.originalEvent.touches[0].pageX;
-									_this.touchPosY = e.originalEvent.touches[0].pageY;
-								})
-								.on('touchmove', function(e) {
-								
-									if (_this.touchPosX === null
-									||	_this.touchPosY === null)
-										return;
-										
-									var	diffX = _this.touchPosX - e.originalEvent.touches[0].pageX,
-										diffY = _this.touchPosY - e.originalEvent.touches[0].pageY,
-										th = $le.outerHeight(),
-										ts = ($le.get(0).scrollHeight - $le.scrollTop());
+					// Touch stuff.
+						$le
+							.on('touchstart', function(e) {
+								_this.touchPosX = e.originalEvent.touches[0].pageX;
+								_this.touchPosY = e.originalEvent.touches[0].pageY;
+							})
+							.on('touchmove', function(e) {
+							
+								if (_this.touchPosX === null
+								||	_this.touchPosY === null)
+									return;
 									
-									// Swipe to hide?
-										if (config.hidden && config.swipeToHide) {
-											
-											var result = false,
-												boundary = 20,
-												delta = 50;
-											
-											switch (config.side) {
-											
-												case 'left':
-													result = (diffY < boundary && diffY > (-1 * boundary)) && (diffX > delta);
-													break;
-											
-												case 'right':
-													result = (diffY < boundary && diffY > (-1 * boundary)) && (diffX < (-1 * delta));
-													break;
-											
-												case 'top':
-													result = (diffX < boundary && diffX > (-1 * boundary)) && (diffY > delta);
-													break;
-											
-												case 'bottom':
-													result = (diffX < boundary && diffX > (-1 * boundary)) && (diffY < (-1 * delta));
-													break;
-											
-											}
-
-											if (result) {
-
-												_this.touchPosX = null;
-												_this.touchPosY = null;
-												_this.hide();
-												
-												return false;
-											
-											}
+								var	diffX = _this.touchPosX - e.originalEvent.touches[0].pageX,
+									diffY = _this.touchPosY - e.originalEvent.touches[0].pageY,
+									th = $le.outerHeight(),
+									ts = ($le.get(0).scrollHeight - $le.scrollTop());
+								
+								// Swipe to hide?
+									if (config.hidden && config.swipeToHide) {
+										
+										var result = false,
+											boundary = 20,
+											delta = 50;
+										
+										switch (config.side) {
+										
+											case 'left':
+												result = (diffY < boundary && diffY > (-1 * boundary)) && (diffX > delta);
+												break;
+										
+											case 'right':
+												result = (diffY < boundary && diffY > (-1 * boundary)) && (diffX < (-1 * delta));
+												break;
+										
+											case 'top':
+												result = (diffX < boundary && diffX > (-1 * boundary)) && (diffY > delta);
+												break;
+										
+											case 'bottom':
+												result = (diffX < boundary && diffX > (-1 * boundary)) && (diffY < (-1 * delta));
+												break;
 										
 										}
-										
-									// Prevent vertical scrolling past the top or bottom
-										if (	($le.scrollTop() == 0 && diffY < 0)
-										||		(ts > (th - 2) && ts < (th + 2) && diffY > 0)	)
+
+										if (result) {
+
+											_this.touchPosX = null;
+											_this.touchPosY = null;
+											_this.hide();
+											
 											return false;
-
-								});
-
-						}
-						else {
-						
-							/*
-							$le.on('scroll', function(e) {
-								
-								var th = $le.outerHeight(),
-									ts = ($le.get(0).scrollHeight - $le.scrollTop());
+										
+										}
 									
-								if (th > ts) {
-									$le.scrollTop(ts);
-									return false;
-								}
-								
-								return false;
+									}
+									
+								// Prevent vertical scrolling past the top or bottom
+									if (	($le.scrollTop() == 0 && diffY < 0)
+									||		(ts > (th - 2) && ts < (th + 2) && diffY > 0)	)
+										return false;
 
 							});
-							*/
-						
-						}
 
 				// Finish init.
 					this.$element = $le;
@@ -1224,7 +1201,7 @@ skel.registerPlugin('layers', (function($) {
 			 * Event type.
 			 * @type {string}
 			 */
-			eventType: 'click',
+			eventType: 'click touchend',
 			
 		/******************************/
 		/* Methods                    */
@@ -1333,7 +1310,7 @@ skel.registerPlugin('layers', (function($) {
 						
 						});
 
-						if (!_._.vars.isTouch)
+						if (!_._.vars.isMobile)
 							_.cache.window.on('resize.lock scroll.lock', function(e) {
 						
 								if (_.cache.exclusiveLayer)
@@ -1392,13 +1369,7 @@ skel.registerPlugin('layers', (function($) {
 							
 							};
 
-							// Hack: Android and WP don't register touch events on fixed elements properly,
-							// so if this layerToggle is on an overlay it needs to be a click.
-								if (_._.vars.deviceType == 'android'
-								||	_._.vars.deviceType == 'wp')
-									x.on('click', a);
-								else
-									x.on(_.eventType, a);
+							x.on(_.eventType, a);
 						
 							break;
 				
@@ -1699,7 +1670,7 @@ skel.registerPlugin('layers', (function($) {
 						_.cache.wrapper.off('touchstart.lock click.lock scroll.lock');
 						_.cache.window.off('orientationchange.lock');
 						
-						if (!_._.vars.isTouch)
+						if (!_._.vars.isMobile)
 							_.cache.window.off('resize.lock scroll.lock');
 
 				},
@@ -1761,9 +1732,6 @@ skel.registerPlugin('layers', (function($) {
 										_.config.transform = false;
 									
 							}
-
-					// Set event type.
-						_.eventType = (_._.vars.isTouch ? 'touchend' : 'click');
 
 					// Initialize objects, transforms.
 						_.initObjects();
