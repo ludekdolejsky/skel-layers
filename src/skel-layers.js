@@ -755,13 +755,22 @@ skel.registerPlugin('layers', (function($) {
 						.css('width', _._.useActive(config.width))
 						.css('height', _._.useActive(config.height));
 					
-					// Hack: If we're using iOS, the layer's height is 100%, and it's not a hidden one
-					// (ie. it'll be visible when we scroll), pad it a bit to cover up the gap we'd
-					// otherwise see (caused by the hiding address bar).
-						if (_._.vars.deviceType == 'ios'
-						&&	config.height == '100%'
-						&&	!config.hidden)
-							$le.css('height', '-webkit-calc(' + _._.useActive(config.height) + ' + 70px)');
+					// Hack: iOS fixes.
+						if (_._.vars.deviceType == 'ios') {
+						
+							// If the layer's height is 100%, and it's not a hidden one (ie. it'll be visible when we
+							// scroll), pad it a bit to cover up the gap we'd otherwise see (caused by the hiding address bar).
+								if (config.height == '100%'
+								&&	!config.hidden)
+									$le.css('height', '-webkit-calc(' + _._.useActive(config.height) + ' + 70px)');
+
+							// Has form inputs? Reset width/height so focusing doesn't break the layer. No idea why this works.
+								if ($le.find('input,select,textarea').length > 0)
+									$le
+										.css('width', $le.css('width'))
+										.css('height', $le.css('height'));
+
+						}
 					
 				// Set position.
 					x = this.positions[config.position];
@@ -819,7 +828,8 @@ skel.registerPlugin('layers', (function($) {
 					
 					}
 				
-				this.visible = true;
+				// Mark as visible.
+					this.visible = true;
 
 			};
 
@@ -961,35 +971,6 @@ skel.registerPlugin('layers', (function($) {
 											
 											}
 									
-								});
-
-					// Hack: iOS zooms + scrolls on input focus. Messes up panel stuff. This fix isn't perfect but it works.
-						if (_._.vars.deviceType == 'ios')
-							$le.find('input,select,textarea')
-								.on('focus', function(event) {
-								
-									var t = $(this);
-									
-									event.preventDefault();
-									event.stopPropagation();
-									
-									window.setTimeout(function() {
-										
-										var scrollPos = _.cache.window._skel_layers_scrollPos;
-										var diff = _.cache.window.scrollTop() - scrollPos;
-										
-										// Reset window scroll to what it was when the view was locked
-											_.cache.window.scrollTop(scrollPos);
-										
-										// Scroll the panel by what the browser tried to scroll the window
-											$le.scrollTop($le.scrollTop() + diff);
-										
-										// Hide/show the field to reset the position of the cursor (fixes a Safari bug)
-											t.hide();
-											window.setTimeout(function() { t.show(); }, 0);
-									
-									}, 100);
-							
 								});
 
 					// Touch stuff
