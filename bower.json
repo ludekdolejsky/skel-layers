@@ -1,6 +1,6 @@
 {
 	"name": "skel-layers",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A Skel plugin for making off-canvas navigation and other stuff.", 
 	"keywords": [ "skel", "plugin", "panels", "skeljs" ],
 	"homepage": "http://getskel.com",

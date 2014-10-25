@@ -1,4 +1,4 @@
-/* skel-layers.js v1.0.0 | (c) n33 | getskel.com | MIT licensed */
+/* skel-layers.js v1.0.1 | (c) n33 | getskel.com | MIT licensed */
 
 skel.registerPlugin('layers', (function($) {
 
