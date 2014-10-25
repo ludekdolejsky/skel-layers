@@ -1,6 +1,6 @@
 # Layers
 
-A plugin for Skel that simplifies making off-canvas navigation, toolbars, and much more (requires jQuery 1.9+).
+A plugin for Skel that simplifies making off-canvas navigation, toolbars, and more (requires Skel 1.0.0+ and jQuery 1.9+).
 
 * Site: http://getskel.com
 * Documentation: http://getskel.com/docs#layers
