@@ -1734,9 +1734,9 @@ skel.registerPlugin('layers', (function($) {
 							}
 
 					// Initialize objects, transforms.
+					    _.initTransforms();
 						_.initObjects();
-						_.initTransforms();
-					
+
 					// Final initialization stuff.
 						_._.DOMReady(function() {
 							
@@ -1808,9 +1808,6 @@ skel.registerPlugin('layers', (function($) {
 				 */
 				initObjects: function() {
 					
-					// window.
-						_.cache.window = $(window);
-
 					_._.DOMReady(function() {
 
 					// html.
@@ -1859,6 +1856,8 @@ skel.registerPlugin('layers', (function($) {
 				 * Initializes transforms.
 				 */
 				initTransforms: function() {
+					// window.
+					_.cache.window = $(window);
 					
 					if (_.config.transform) {
 					
